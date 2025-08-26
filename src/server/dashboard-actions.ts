@@ -2,7 +2,7 @@
 
 import { ROUTES } from "@/constants";
 import { revalidatePath } from "next/cache";
-import z from "zod";
+import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 
 const userSchema = z.object({
