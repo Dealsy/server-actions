@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Mail, Pencil } from "lucide-react";
 import { StatusSelectField } from "./StatusSelectField";
-import { updateUserAction, deleteUserAction } from "@/../actions";
+import { updateUserAction, deleteUserAction } from "@/server/dashboard-actions";
 import {
   Dialog,
   DialogTrigger,
@@ -28,6 +28,7 @@ export type UIUser = {
   role: "admin" | "manager" | "member";
   avatarUrl: string | null;
   createdAt: Date;
+  updatedAt: Date;
 };
 
 export function EditableUserRow({ user }: { user: UIUser }) {
@@ -60,7 +61,7 @@ export function EditableUserRow({ user }: { user: UIUser }) {
 
   return (
     <Dialog>
-      <div className="border rounded p-3 shadow-sm hover:shadow-md transition-shadow">
+      <div className="border bg-card rounded p-3 shadow-sm hover:shadow-md transition-shadow">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 min-w-0">
             <Avatar>
@@ -81,23 +82,26 @@ export function EditableUserRow({ user }: { user: UIUser }) {
               <div className="font-medium leading-tight truncate">
                 {user.name}
               </div>
-              <div className="text-xs text-gray-500">
+              <div className="text-xs text-muted-foreground">
                 Joined {new Date(user.createdAt).toLocaleDateString()}
               </div>
             </div>
           </div>
 
           <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2 items-center min-w-0">
-            <div className="truncate flex items-center gap-2 text-sm text-gray-600">
+            <div className="truncate flex items-center gap-2 text-sm text-muted-foreground">
               <Mail className="size-4 opacity-60" />
               <span className="truncate">{user.email}</span>
             </div>
             <div>
               {(() => {
                 const roleTone: Record<UIUser["role"], string> = {
-                  admin: "bg-red-50 text-red-700 border-red-200",
-                  manager: "bg-blue-50 text-blue-700 border-blue-200",
-                  member: "bg-emerald-50 text-emerald-700 border-emerald-200",
+                  admin:
+                    "bg-red-50 text-red-700 border-red-200 dark:bg-red-500/15 dark:text-red-300 dark:border-red-500/30",
+                  manager:
+                    "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-500/15 dark:text-blue-300 dark:border-blue-500/30",
+                  member:
+                    "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-300 dark:border-emerald-500/30",
                 };
                 return (
                   <span
@@ -111,10 +115,10 @@ export function EditableUserRow({ user }: { user: UIUser }) {
                 );
               })()}
             </div>
-            <div className="truncate text-sm text-gray-600">
+            <div className="truncate text-sm text-muted-foreground">
               {user.avatarUrl ? (
                 <a
-                  className="underline underline-offset-2"
+                  className="underline underline-offset-2 hover:text-foreground"
                   href={user.avatarUrl}
                   target="_blank"
                   rel="noreferrer"
@@ -131,9 +135,9 @@ export function EditableUserRow({ user }: { user: UIUser }) {
             <DialogTrigger asChild>
               <Button
                 type="button"
-                variant="secondary"
+                variant="outline"
                 size="sm"
-                className="gap-1 bg-yellow-400 hover:bg-yellow-500"
+                className="gap-1"
               >
                 <Pencil className="size-4" />
               </Button>

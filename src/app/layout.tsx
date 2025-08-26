@@ -1,23 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
-import { APP_ROUTES } from "@/../constants";
-import {
-  SidebarProvider,
-  Sidebar,
-  SidebarHeader,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarInset,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { ClerkProvider } from "@clerk/nextjs";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { TopNav } from "@/components/TopNav";
+import { AppSidebar } from "@/components/AppSidebar";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,47 +28,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <SidebarProvider>
-          <Sidebar>
-            <SidebarHeader>
-              <SidebarGroup>
-                <SidebarGroupLabel>Examples</SidebarGroupLabel>
-              </SidebarGroup>
-            </SidebarHeader>
-            <SidebarContent>
-              <SidebarGroup>
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    {APP_ROUTES.map((r) => (
-                      <SidebarMenuItem key={r.href}>
-                        <SidebarMenuButton asChild>
-                          <Link href={r.href}>{r.label}</Link>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ))}
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </SidebarGroup>
-            </SidebarContent>
-            <SidebarFooter />
-          </Sidebar>
-          <SidebarInset>
-            <div className="p-4">
-              <div className="mb-4 flex items-center gap-2">
-                <SidebarTrigger />
-                <span className="text-sm text-muted-foreground">
-                  Toggle sidebar (⌘/Ctrl+B)
-                </span>
-              </div>
-              {children}
-            </div>
-          </SidebarInset>
-        </SidebarProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <SidebarProvider>
+              <AppSidebar />
+              <SidebarInset>
+                <TopNav />
+                {children}
+              </SidebarInset>
+            </SidebarProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
