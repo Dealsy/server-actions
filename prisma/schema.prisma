@@ -1,0 +1,27 @@
+// Prisma schema for Projects demo (SQLite)
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+
+enum Role {
+  admin
+  manager
+  member
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  role      Role     @default(member)
+  avatarUrl String?
+  createdAt DateTime @default(now())
+}
+
+

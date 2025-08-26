@@ -1,6 +1,23 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
+import { APP_ROUTES } from "@/../constants";
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarInset,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +44,42 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <SidebarProvider>
+          <Sidebar>
+            <SidebarHeader>
+              <SidebarGroup>
+                <SidebarGroupLabel>Examples</SidebarGroupLabel>
+              </SidebarGroup>
+            </SidebarHeader>
+            <SidebarContent>
+              <SidebarGroup>
+                <SidebarGroupContent>
+                  <SidebarMenu>
+                    {APP_ROUTES.map((r) => (
+                      <SidebarMenuItem key={r.href}>
+                        <SidebarMenuButton asChild>
+                          <Link href={r.href}>{r.label}</Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                </SidebarGroupContent>
+              </SidebarGroup>
+            </SidebarContent>
+            <SidebarFooter />
+          </Sidebar>
+          <SidebarInset>
+            <div className="p-4">
+              <div className="mb-4 flex items-center gap-2">
+                <SidebarTrigger />
+                <span className="text-sm text-muted-foreground">
+                  Toggle sidebar (⌘/Ctrl+B)
+                </span>
+              </div>
+              {children}
+            </div>
+          </SidebarInset>
+        </SidebarProvider>
       </body>
     </html>
   );
