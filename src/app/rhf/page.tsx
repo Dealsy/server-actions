@@ -65,9 +65,9 @@ export default function RhfDemoPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto py-10 space-y-6">
+    <div className="max-w-lg mx-auto py-10 space-y-6">
       <h1 className="text-2xl font-semibold">Sign up (RHF + Shadcn + Zod)</h1>
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-muted-foreground">
         A minimal signup form with client-side validation using React Hook Form
         + Zod, styled with Shadcn UI.
       </p>
@@ -150,7 +150,7 @@ export default function RhfDemoPage() {
 
           <div className="flex items-center gap-3">
             <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Submitting..." : "Submit"}
+              {form.formState.isSubmitting ? "Submitting..." : "Create account"}
             </Button>
             <Button
               type="button"
@@ -165,7 +165,9 @@ export default function RhfDemoPage() {
           </div>
 
           {serverMessage && (
-            <div className="rounded border p-3 text-sm">{serverMessage}</div>
+            <div className="rounded border bg-card p-3 text-sm">
+              {serverMessage}
+            </div>
           )}
         </form>
       </Form>

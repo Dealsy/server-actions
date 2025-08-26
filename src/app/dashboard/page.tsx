@@ -1,5 +1,6 @@
 import { Suspense } from "react";
-import { createUserAction } from "@/../actions";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { createUserAction } from "@/server/dashboard-actions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import UsersList from "@/components/UsersList";
@@ -25,6 +26,7 @@ export default async function DashboardPage() {
         <h1 className="text-2xl font-semibold">
           Users Dashboard (Server Actions)
         </h1>
+        <div />
         <Dialog>
           <DialogTrigger asChild>
             <Button className="gap-2">
@@ -87,10 +89,17 @@ export default async function DashboardPage() {
       </div>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-medium">Users</h2>
-        <Suspense fallback={<DashboardSkeleton />}>
-          <UsersList />
-        </Suspense>
+        <SignedOut>
+          <div className="rounded border bg-card p-6 text-sm text-muted-foreground">
+            Please sign in to view and manage users.
+          </div>
+        </SignedOut>
+        <SignedIn>
+          <h2 className="text-lg font-medium">Users</h2>
+          <Suspense fallback={<DashboardSkeleton />}>
+            <UsersList />
+          </Suspense>
+        </SignedIn>
       </section>
     </>
   );

@@ -7,17 +7,41 @@ type UIUser = {
   email: string;
   role: "admin" | "manager" | "member";
   avatarUrl: string | null;
-  createdAt: Date;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export default async function UsersList() {
-  const users = (await prisma.user.findMany({
+  const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
-  })) as UIUser[];
+  });
+
+  const uiUsers: UIUser[] = users.map((u: any) => {
+    const created = new Date(u?.createdAt);
+    const updatedCandidate = u?.updatedAt ? new Date(u.updatedAt) : null;
+    const updated =
+      updatedCandidate && !isNaN(updatedCandidate.getTime())
+        ? updatedCandidate
+        : created;
+
+    return {
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      role: u.role,
+      avatarUrl: u.avatarUrl ?? null,
+      createdAt: !isNaN(created.getTime())
+        ? created.toISOString()
+        : new Date().toISOString(),
+      updatedAt: !isNaN(updated.getTime())
+        ? updated.toISOString()
+        : new Date().toISOString(),
+    } as UIUser;
+  });
 
   return (
     <div className="grid gap-2">
-      {users.map((u: UIUser) => (
+      {uiUsers.map((u: UIUser) => (
         <EditableUserRow key={u.id} user={u} />
       ))}
     </div>

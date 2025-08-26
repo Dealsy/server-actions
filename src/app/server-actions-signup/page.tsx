@@ -4,7 +4,7 @@ import { startTransition, useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { signupAction } from "@/../actions";
+import { signupAction } from "@/server/user-actions";
 
 type ActionState = {
   ok: boolean;
@@ -26,10 +26,11 @@ export default function ServerActionsSignupPage() {
   const [state, formAction] = useActionState(signupAction, initialState);
 
   return (
-    <div className="max-w-md mx-auto py-10 space-y-6">
+    <div className="max-w-lg mx-auto py-10 space-y-6">
       <h1 className="text-2xl font-semibold">Sign up (Server Actions + Zod)</h1>
-      <p className="text-sm text-gray-500">
-        Same UI as the RHF demo, but using a native form and a server action.
+      <p className="text-sm text-muted-foreground">
+        A minimal signup form with server-side validation using Zod, styled with
+        Shadcn UI.
       </p>
 
       <form action={formAction} className="space-y-5">
@@ -103,7 +104,9 @@ export default function ServerActionsSignupPage() {
         </div>
 
         {state.message && (
-          <div className="rounded border p-3 text-sm mt-2">{state.message}</div>
+          <div className="rounded border bg-card p-3 text-sm mt-2">
+            {state.message}
+          </div>
         )}
       </form>
     </div>
