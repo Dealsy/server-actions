@@ -4,6 +4,7 @@ import { ROUTES } from "@/constants";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 
 const userSchema = z.object({
   name: z.string().min(2),
@@ -17,6 +18,13 @@ const userSchema = z.object({
 });
 
 export async function createUserAction(formData: FormData) {
+  const { userId } = await auth();
+  if (!userId) {
+    return {
+      ok: false,
+      message: "You must be logged in to create a user",
+    };
+  }
   const parsed = userSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
